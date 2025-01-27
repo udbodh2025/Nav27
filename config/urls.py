@@ -1,22 +1,49 @@
-"""
-URL configuration for config project.
+# flake8: noqa
+from django_otp.admin import OTPAdminSite
 
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
+from profiles.views.account_data_views import account_data
+from settings.views.login_activity_views import LoginActivityView
 
+# admin.site.__class__ = OTPAdminSite
+
+# Enforce 2FA only in production.
+'''
+if not settings.DEBUG:
+    admin.site.__class__ = OTPAdminSite
+'''
+admin.site.site_header = 'Freshdesk Portal'
+admin.site.site_title = 'Freshdesk CRM Platform'
+admin.site.index_title = 'Freshdesk CRM Platform'
+admin.autodiscover()
 urlpatterns = [
+    # path('__debug__/', include('debug_toolbar.urls')),
+    path('', include('core.urls')),
+    path('customers/', include('customers.urls')),
+    path('profile/', include('profiles.urls')),
+    path('purchase/', include('purchase.urls')),
+    path('products/', include('products.urls')),
+    path('service/', include('service.urls')),
+    path('suppliers/', include('suppliers.urls')),
+    path('settings/', include('settings.urls')),
+    path('sales/', include('sales.urls')),
+    path('expense/', include('expense.urls')),
+    path('return/', include('returns.urls')),
+    path('damage/', include('damage.urls')),
+    path('stock/', include('stock.urls')),
+    path('accounts/', include('accounts.urls')),
+    path('accounts-user/', include('allauth.urls')),
+    path('auth/', include('authenticator.urls')),
+    path('analytics/', include('analytics.urls')),
+    path('accounts/access_tool/', account_data, name='account_data'),
+    path('session/login_activity/', LoginActivityView.as_view(), name='login_activity'),
+
+    # Admin Stuff
     path('admin/', admin.site.urls),
-]
+    # path('admin/defender/', include('defender.urls')),
+
+
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
