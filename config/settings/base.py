@@ -1,11 +1,3 @@
-"""
-Title: Freshdesk CRM Platform.
-Description: Freshdesk is smart ERP solution to manage your business. you can keep track of your inventory customers, products, orders, invoices, and more.
-Author: Hossain Chisty(Backend Developer)
-Contact: hossain.chisty11@gmail.com
-Github: https://github.com/hossainchisty
-
-"""
 import os
 import re
 from pathlib import Path
@@ -40,6 +32,7 @@ ALLOWED_HOSTS = ['*']
 
 
 DJANGO_COMMON_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.sites',
